@@ -156,19 +156,33 @@ app.put("/districts/:districtId", async(request,response) =>{
 //Get States
 app.get("/states/:stateId/stats/", async(request,response)=>{
     const {stateId} = request.params;
-    const getStatesQuery = `SELECT * FROM state WHERE state_id = ${stateId};`;
-    const statesArray = await db.all(getStatesQuery);
-    response.send(statesArray);
+    const getStatestatsQuery = `SELECT 
+    SUM(cases),
+    SUM(cured),
+    SUM(active),
+    SUM(deaths) 
+    FROM district WHERE state_id = ${stateId}`;
+    const states = await db.get(getStatestatsQuery);
+    console.log(states);
+    response.send({
+        totalCases: states["SUM(cases)"],
+        totalCured: states["SUM(cured)"],
+        totalActive: states["SUM(active)"], 
+        totalDetaths: states["SUM(detaths)"]
+    });
     
 });
 
 //Get DistrictIds
 app.get("/districts/:districtId/details/", async(request,response)=>{
     const {districtId} = request.params;
-    const getStatesQuery = `SELECT * FROM district WHERE district_id = ${districtId};`;
-    const statesArray = await db.all(getStatesQuery);
-    response.send(statesArray);
-    
+    const getDistrictIdQuery = `SELECT * FROM district WHERE district_id = ${districtId};`;
+    const getDistrictIdQuereyResponse = await db.get(getDistrictIdQuery);
+    response.send(getDistrictIdQuereyResponse);
+
+    const getStateNameQuery = `SELECT state_name as stateName FROM state WHERE state_id = ${getDistrictIdQuereyResponse.state_id};`;
+    const getStateNameQueryResponse = await db.get(getStateNameQuery);
+    response.send(getStateNameQueryResponse);
 });
 
 module.exports = app;
