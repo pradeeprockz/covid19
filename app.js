@@ -46,37 +46,7 @@ app.get("/states/:stateId/",async (request,response) =>{
 });
 
 
-    //Add District Table 
-app.put("/districs/", async (request, response) => {
-    const districtDetails = request.body;
-    const {
-        distictName,
-        stateId,
-        cases,
-        cured,
-        active,
-        deaths,
-    } = districtDetails;
-
-    const addStateQuery = `INSERT INTO district 
-    (distict_name,
-    state_id,
-    cases,
-    cured,
-    active,
-    deaths) 
-    VALUES('${distictName}',
-    '${stateId}',
-    '${cases}',
-    '${cured}',
-    '${active}',
-    '${deaths}';)`;
-    const dbResponse = await db.run(addStateQuery);
-    districtId = dbResponse.lastID;
-    response.send({ districtId: districtId });
-    response.send("District Successfully Added");
-
-});
+  
 
 //ADD Districts 
 app.post("/districts/", async (request,response) =>{
