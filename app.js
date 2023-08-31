@@ -105,7 +105,7 @@ app.post("/districts/", async (request,response) =>{
             '${deaths}',
         );`;
         const dbResponse = db.run(addDistrictsQuery);
-        const stateId =  dbResponse.lastID;
+        stateId =  dbResponse.lastID;
         response.send({stateId:stateId});
         response.send("District Successfully Added");
     
